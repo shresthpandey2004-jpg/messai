@@ -141,7 +141,7 @@ const Index = () => {
           <p className="flex items-center justify-center gap-2">
             Made with <span className="text-destructive">❤</span> for Hostel Students
           </p>
-          <p className="text-sm mt-2">© 2024 MessAI - Smart Hostel Mess System</p>
+          <p className="text-sm mt-2">By- Shresth Pandey</p>
         </div>
       </footer>
     </div>
