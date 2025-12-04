@@ -15,7 +15,7 @@ const AdminLogin = () => {
     e.preventDefault();
     
     // Simple mock authentication
-    if (email === "shresth@messai.com" && password === "shresth1812") {
+    if (email === "shresth@messai.com" && password === "shresth1") {
       toast({
         title: "Welcome, Admin! 🎉",
         description: "Login successful"
@@ -52,7 +52,7 @@ const AdminLogin = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@messai.com"
+              placeholder="shresth@messai.com"
               className="bg-muted/50"
               required
             />
@@ -89,8 +89,8 @@ const AdminLogin = () => {
         <div className="mt-6 p-4 bg-muted/50 rounded-xl text-sm">
           <p className="text-muted-foreground text-center">
             <strong>Demo Credentials:</strong><br />
-            Email: admin@messai.com<br />
-            Password: admin123
+            Email: shresth@messai.com<br />
+            Password: shresth1
           </p>
         </div>
 
