@@ -15,7 +15,7 @@ const AdminLogin = () => {
     e.preventDefault();
     
     // Simple mock authentication
-    if (email === "admin@messai.com" && password === "admin123") {
+    if (email === "shresth@messai.com" && password === "shresth1812") {
       toast({
         title: "Welcome, Admin! 🎉",
         description: "Login successful"
