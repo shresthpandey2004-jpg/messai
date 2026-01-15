@@ -12,6 +12,7 @@ interface User {
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
+  isLoading: boolean;
   login: (userData: User) => void;
   logout: () => void;
   updateProfile: (userData: Partial<User>) => void;
@@ -21,6 +22,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   // Load user from localStorage on mount
@@ -29,6 +31,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (savedUser) {
       setUser(JSON.parse(savedUser));
     }
+    setIsLoading(false);
     // No default user - user must login
   }, []);
 
@@ -66,6 +69,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       value={{
         user,
         isAuthenticated: !!user,
+        isLoading,
         login,
         logout,
         updateProfile,
