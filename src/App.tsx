@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { MenuReactionProvider } from "@/contexts/MenuReactionContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Index from "./pages/Index";
 import WeeklyMenu from "./pages/WeeklyMenu";
@@ -32,8 +33,9 @@ const App = () => (
         <AuthProvider>
           <MenuReactionProvider>
             <Routes>
+              <Route path="/" element={<Landing />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
+              <Route path="/home" element={<ProtectedRoute><Index /></ProtectedRoute>} />
               <Route path="/menu" element={<ProtectedRoute><WeeklyMenu /></ProtectedRoute>} />
               <Route path="/feedback" element={<ProtectedRoute><Feedback /></ProtectedRoute>} />
               <Route path="/complaint" element={<ProtectedRoute><AIComplaint /></ProtectedRoute>} />

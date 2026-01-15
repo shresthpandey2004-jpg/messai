@@ -58,7 +58,7 @@ const Login = () => {
         role: "student"
       });
       
-      navigate("/");
+      navigate("/home");
     } else {
       if (!formData.email || !formData.password) {
         toast.error("Please enter email and password");
@@ -73,7 +73,7 @@ const Login = () => {
         role: "student"
       });
       
-      navigate("/");
+      navigate("/home");
     }
     
     setIsLoading(false);
