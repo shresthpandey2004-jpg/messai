@@ -15,7 +15,7 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { login } = useAuth();
-  const { addStudent, getStudentByEmail } = useStudents();
+  const { addStudent, getStudentByEmail, verifyStudent } = useStudents();
   const [isSignup, setIsSignup] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
@@ -72,10 +72,11 @@ const Login = () => {
         return;
       }
       
-      // Add student to the system
+      // Add student to the system with password
       addStudent({
         name: formData.name,
         email: formData.email,
+        password: formData.password, // Will be hashed in context
         phone: formData.phone,
         roomNumber: formData.roomNumber,
         course: formData.course,
@@ -97,19 +98,38 @@ const Login = () => {
       toast.success("Account created successfully! 🎉");
       navigate("/home");
     } else {
+      // Login logic
       if (!formData.email || !formData.password) {
         toast.error("Please enter email and password");
         setIsLoading(false);
         return;
       }
       
+      // Verify student credentials
+      const verifiedStudent = verifyStudent(formData.email, formData.password);
+      
+      if (!verifiedStudent) {
+        toast.error("Invalid email or password!");
+        setIsLoading(false);
+        return;
+      }
+      
+      // Check if account is active
+      if (verifiedStudent.status !== "active") {
+        toast.error("Your account is inactive. Please contact admin.");
+        setIsLoading(false);
+        return;
+      }
+      
+      // Login successful
       login({
-        name: "Student",
-        email: formData.email,
-        roomNumber: "A-204",
+        name: verifiedStudent.name,
+        email: verifiedStudent.email,
+        roomNumber: verifiedStudent.roomNumber,
         role: "student"
       });
       
+      toast.success(`Welcome back, ${verifiedStudent.name}! 👋`);
       navigate("/home");
     }
     

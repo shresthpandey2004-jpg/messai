@@ -4,6 +4,7 @@ export interface Student {
   id: string;
   name: string;
   email: string;
+  password: string; // Hashed password
   phone: string;
   roomNumber: string;
   course: string;
@@ -21,9 +22,22 @@ interface StudentContextType {
   deleteStudent: (id: string) => void;
   getStudentByEmail: (email: string) => Student | undefined;
   toggleStudentStatus: (id: string) => void;
+  verifyStudent: (email: string, password: string) => Student | null;
 }
 
 const StudentContext = createContext<StudentContextType | undefined>(undefined);
+
+// Simple hash function for demo (in production, use bcrypt or similar)
+const hashPassword = (password: string): string => {
+  // Simple hash - in production use proper hashing like bcrypt
+  let hash = 0;
+  for (let i = 0; i < password.length; i++) {
+    const char = password.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+  return `hashed_${Math.abs(hash).toString(36)}`;
+};
 
 export const StudentProvider = ({ children }: { children: ReactNode }) => {
   const [students, setStudents] = useState<Student[]>(() => {
@@ -32,12 +46,13 @@ export const StudentProvider = ({ children }: { children: ReactNode }) => {
       return JSON.parse(saved);
     }
     
-    // Initial mock data
+    // Initial mock data with hashed passwords
     return [
       {
         id: "1",
         name: "Rahul Sharma",
         email: "rahul.sharma@example.com",
+        password: hashPassword("password123"),
         phone: "+91 98765 43210",
         roomNumber: "A-101",
         course: "B.Tech CSE",
@@ -51,6 +66,7 @@ export const StudentProvider = ({ children }: { children: ReactNode }) => {
         id: "2",
         name: "Priya Singh",
         email: "priya.singh@example.com",
+        password: hashPassword("password123"),
         phone: "+91 98765 43211",
         roomNumber: "B-205",
         course: "B.Tech ECE",
@@ -64,6 +80,7 @@ export const StudentProvider = ({ children }: { children: ReactNode }) => {
         id: "3",
         name: "Amit Kumar",
         email: "amit.kumar@example.com",
+        password: hashPassword("password123"),
         phone: "+91 98765 43212",
         roomNumber: "A-304",
         course: "MBA",
@@ -77,6 +94,7 @@ export const StudentProvider = ({ children }: { children: ReactNode }) => {
         id: "4",
         name: "Sneha Patel",
         email: "sneha.patel@example.com",
+        password: hashPassword("password123"),
         phone: "+91 98765 43213",
         roomNumber: "C-102",
         course: "B.Tech ME",
@@ -90,6 +108,7 @@ export const StudentProvider = ({ children }: { children: ReactNode }) => {
         id: "5",
         name: "Vikram Reddy",
         email: "vikram.reddy@example.com",
+        password: hashPassword("password123"),
         phone: "+91 98765 43214",
         roomNumber: "B-401",
         course: "B.Tech IT",
@@ -110,6 +129,7 @@ export const StudentProvider = ({ children }: { children: ReactNode }) => {
     const newStudent: Student = {
       ...studentData,
       id: Date.now().toString(),
+      password: hashPassword(studentData.password), // Hash the password
     };
     setStudents((prev) => [...prev, newStudent]);
     return newStudent;
@@ -117,7 +137,18 @@ export const StudentProvider = ({ children }: { children: ReactNode }) => {
 
   const updateStudent = (id: string, studentData: Omit<Student, "id">) => {
     setStudents((prev) =>
-      prev.map((s) => (s.id === id ? { ...studentData, id } : s))
+      prev.map((s) => 
+        s.id === id 
+          ? { 
+              ...studentData, 
+              id,
+              // Only hash password if it's being changed
+              password: studentData.password.startsWith('hashed_') 
+                ? studentData.password 
+                : hashPassword(studentData.password)
+            } 
+          : s
+      )
     );
   };
 
@@ -139,6 +170,26 @@ export const StudentProvider = ({ children }: { children: ReactNode }) => {
     );
   };
 
+  const verifyStudent = (email: string, password: string): Student | null => {
+    const student = getStudentByEmail(email);
+    if (!student) {
+      return null;
+    }
+    
+    // Check if account is active
+    if (student.status !== "active") {
+      return null;
+    }
+    
+    // Verify password
+    const hashedInput = hashPassword(password);
+    if (student.password === hashedInput) {
+      return student;
+    }
+    
+    return null;
+  };
+
   return (
     <StudentContext.Provider
       value={{
@@ -148,6 +199,7 @@ export const StudentProvider = ({ children }: { children: ReactNode }) => {
         deleteStudent,
         getStudentByEmail,
         toggleStudentStatus,
+        verifyStudent,
       }}
     >
       {children}
@@ -162,3 +214,6 @@ export const useStudents = () => {
   }
   return context;
 };
+
+// Export hash function for use in Login
+export { hashPassword };

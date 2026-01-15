@@ -21,6 +21,7 @@ import { User, Mail, Phone, Home, GraduationCap, Calendar } from "lucide-react";
 interface Student {
   name: string;
   email: string;
+  password: string;
   phone: string;
   roomNumber: string;
   course: string;
@@ -47,6 +48,7 @@ export const AddEditStudentModal = ({
   const [formData, setFormData] = useState<Student>({
     name: "",
     email: "",
+    password: "",
     phone: "",
     roomNumber: "",
     course: "",
@@ -64,6 +66,7 @@ export const AddEditStudentModal = ({
       setFormData({
         name: "",
         email: "",
+        password: "",
         phone: "",
         roomNumber: "",
         course: "",
@@ -131,6 +134,25 @@ export const AddEditStudentModal = ({
                   required
                 />
               </div>
+
+              {!student && (
+                <div className="space-y-2">
+                  <Label htmlFor="password">Password *</Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="Enter password"
+                    value={formData.password}
+                    onChange={(e) =>
+                      setFormData({ ...formData, password: e.target.value })
+                    }
+                    required={!student}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Minimum 6 characters required
+                  </p>
+                </div>
+              )}
 
               <div className="space-y-2">
                 <Label htmlFor="phone">Phone Number *</Label>
