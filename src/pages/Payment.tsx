@@ -16,15 +16,21 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
+import { generateReceipt } from "@/utils/generateReceipt";
 
 const Payment = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useAuth();
   const amount = location.state?.amount || 3500;
-  const billMonth = location.state?.billMonth || "December 2024";
+  const billMonth = location.state?.billMonth || new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  const totalMeals = location.state?.totalMeals || 62;
+  const mealRate = location.state?.mealRate || 56.45;
   
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [transactionId, setTransactionId] = useState("");
   const [selectedUPI, setSelectedUPI] = useState<string>("");
   
   const [cardDetails, setCardDetails] = useState({
@@ -42,6 +48,8 @@ const Payment = () => {
     // Simulate payment processing
     await new Promise(resolve => setTimeout(resolve, 2000));
     
+    const txnId = `TXN${Date.now().toString().slice(-8)}`;
+    setTransactionId(txnId);
     setIsProcessing(false);
     setPaymentSuccess(true);
     
@@ -49,10 +57,28 @@ const Payment = () => {
       description: `₹${amount} paid successfully via ${method}`
     });
     
-    // Redirect after 2 seconds
+    // Generate receipt after successful payment
+    setTimeout(() => {
+      generateReceipt({
+        userName: user?.name || "User",
+        userEmail: user?.email || "email@example.com",
+        roomNumber: user?.roomNumber || "N/A",
+        totalMeals: totalMeals,
+        mealRate: mealRate,
+        totalAmount: amount,
+        billMonth: billMonth,
+        transactionId: txnId,
+        paymentDate: new Date().toLocaleDateString('en-IN', { 
+          dateStyle: 'long',
+          timeZone: 'Asia/Kolkata'
+        }),
+      });
+    }, 500);
+    
+    // Redirect after 3 seconds
     setTimeout(() => {
       navigate("/account");
-    }, 2000);
+    }, 3000);
   };
 
   if (paymentSuccess) {
@@ -70,7 +96,7 @@ const Payment = () => {
             <div className="bg-muted/50 rounded-lg p-4 mb-6">
               <div className="flex justify-between text-sm mb-2">
                 <span className="text-muted-foreground">Transaction ID</span>
-                <span className="font-mono font-semibold">TXN{Date.now().toString().slice(-8)}</span>
+                <span className="font-mono font-semibold">{transactionId}</span>
               </div>
               <div className="flex justify-between text-sm mb-2">
                 <span className="text-muted-foreground">Amount Paid</span>
@@ -81,6 +107,9 @@ const Payment = () => {
                 <span className="font-semibold">{billMonth}</span>
               </div>
             </div>
+            <p className="text-xs text-muted-foreground mb-2">
+              Receipt is being generated...
+            </p>
             <p className="text-xs text-muted-foreground">
               Redirecting to account page...
             </p>
@@ -308,11 +337,11 @@ const Payment = () => {
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Meals Consumed</span>
-                    <span className="font-medium">62 meals</span>
+                    <span className="font-medium">{totalMeals} meals</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Rate per meal</span>
-                    <span className="font-medium">₹56.45</span>
+                    <span className="font-medium">₹{mealRate.toFixed(2)}</span>
                   </div>
                   <div className="border-t border-border pt-3">
                     <div className="flex justify-between">

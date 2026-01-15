@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { MenuReactionProvider } from "@/contexts/MenuReactionContext";
 import { LikeDislikeProvider } from "@/contexts/LikeDislikeContext";
+import { BillingProvider } from "@/contexts/BillingContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
@@ -33,28 +34,30 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <MenuReactionProvider>
-            <LikeDislikeProvider>
-              <Routes>
-              <Route path="/" element={<Landing />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/home" element={<ProtectedRoute><Index /></ProtectedRoute>} />
-              <Route path="/menu" element={<ProtectedRoute><WeeklyMenu /></ProtectedRoute>} />
-              <Route path="/feedback" element={<ProtectedRoute><Feedback /></ProtectedRoute>} />
-              <Route path="/complaint" element={<ProtectedRoute><AIComplaint /></ProtectedRoute>} />
-              <Route path="/booking" element={<ProtectedRoute><MealBooking /></ProtectedRoute>} />
-              <Route path="/account" element={<ProtectedRoute><MyAccount /></ProtectedRoute>} />
-              <Route path="/payment" element={<ProtectedRoute><Payment /></ProtectedRoute>} />
-              <Route path="/admin" element={<AdminLogin />} />
-              <Route path="/admin/dashboard" element={<AdminDashboard />} />
-              <Route path="/admin/add-menu" element={<AddMenu />} />
-              <Route path="/admin/analytics" element={<Analytics />} />
-              <Route path="/admin/complaints" element={<AdminComplaints />} />
-              <Route path="/admin/attendance" element={<AdminAttendance />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-            </LikeDislikeProvider>
-          </MenuReactionProvider>
+          <BillingProvider>
+            <MenuReactionProvider>
+              <LikeDislikeProvider>
+                <Routes>
+                <Route path="/" element={<Landing />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/home" element={<ProtectedRoute><Index /></ProtectedRoute>} />
+                <Route path="/menu" element={<ProtectedRoute><WeeklyMenu /></ProtectedRoute>} />
+                <Route path="/feedback" element={<ProtectedRoute><Feedback /></ProtectedRoute>} />
+                <Route path="/complaint" element={<ProtectedRoute><AIComplaint /></ProtectedRoute>} />
+                <Route path="/booking" element={<ProtectedRoute><MealBooking /></ProtectedRoute>} />
+                <Route path="/account" element={<ProtectedRoute><MyAccount /></ProtectedRoute>} />
+                <Route path="/payment" element={<ProtectedRoute><Payment /></ProtectedRoute>} />
+                <Route path="/admin" element={<AdminLogin />} />
+                <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                <Route path="/admin/add-menu" element={<AddMenu />} />
+                <Route path="/admin/analytics" element={<Analytics />} />
+                <Route path="/admin/complaints" element={<AdminComplaints />} />
+                <Route path="/admin/attendance" element={<AdminAttendance />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+              </LikeDislikeProvider>
+            </MenuReactionProvider>
+          </BillingProvider>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>

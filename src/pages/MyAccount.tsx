@@ -2,11 +2,13 @@ import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { EditProfileModal } from "@/components/EditProfileModal";
 import { useAuth } from "@/contexts/AuthContext";
+import { useBilling } from "@/contexts/BillingContext";
 import { mockUser } from "@/data/mockData";
 import { Mail, Home, Calendar, CreditCard, Check, X, Download, LogOut, Edit, TrendingUp, Bell, QrCode, Utensils, Award, Clock, DollarSign, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { generateReceipt } from "@/utils/generateReceipt";
 import {
   Card,
   CardContent,
@@ -18,10 +20,16 @@ import { Badge } from "@/components/ui/badge";
 
 const MyAccount = () => {
   const { user, logout } = useAuth();
+  const { getTotalMeals, getMealCost, getMonthlyBill } = useBilling();
   const navigate = useNavigate();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [showQR, setShowQR] = useState(false);
   const attendanceRate = mockUser.attendance.filter(a => a.present).length / mockUser.attendance.length * 100;
+
+  // Get actual billing data
+  const totalMeals = getTotalMeals();
+  const mealRate = getMealCost();
+  const monthlyBill = getMonthlyBill();
 
   // Mock data for new features
   const paymentHistory = [
@@ -31,10 +39,10 @@ const MyAccount = () => {
   ];
 
   const mealStats = {
-    totalMeals: 248,
+    totalMeals: totalMeals,
     favoriteMeal: "Paneer Butter Masala",
     mostSkipped: "Upma",
-    avgMealsPerDay: 3.2,
+    avgMealsPerDay: (totalMeals / new Date().getDate()).toFixed(1),
   };
 
   const notifications = [
@@ -43,14 +51,30 @@ const MyAccount = () => {
   ];
 
   const handleDownloadBill = () => {
-    toast.success("Bill downloaded successfully! 📄");
+    const currentMonth = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    
+    generateReceipt({
+      userName: user?.name || "User",
+      userEmail: user?.email || "email@example.com",
+      roomNumber: user?.roomNumber || "N/A",
+      totalMeals: totalMeals,
+      mealRate: mealRate,
+      totalAmount: monthlyBill,
+      billMonth: currentMonth,
+    });
+    
+    toast.success("Receipt generated! 📄", {
+      description: "Opening print dialog..."
+    });
   };
 
   const handlePayNow = () => {
     navigate("/payment", { 
       state: { 
-        amount: mockUser.monthlyBill, 
-        billMonth: "December 2024" 
+        amount: monthlyBill, 
+        billMonth: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
+        totalMeals: totalMeals,
+        mealRate: mealRate,
       } 
     });
   };
@@ -247,17 +271,17 @@ const MyAccount = () => {
                   <div className="grid grid-cols-2 gap-4 mb-3">
                     <div>
                       <span className="text-muted-foreground text-sm">Meals Consumed</span>
-                      <p className="font-medium text-foreground text-lg">62 meals</p>
+                      <p className="font-medium text-foreground text-lg">{totalMeals} meals</p>
                     </div>
                     <div>
                       <span className="text-muted-foreground text-sm">Rate per meal</span>
-                      <p className="font-medium text-foreground text-lg">₹56.45</p>
+                      <p className="font-medium text-foreground text-lg">₹{mealRate.toFixed(2)}</p>
                     </div>
                   </div>
                   <div className="border-t border-border pt-3">
                     <div className="flex justify-between items-center">
                       <span className="font-semibold text-foreground">Total Amount</span>
-                      <span className="text-2xl font-bold gradient-text">₹{mockUser.monthlyBill}</span>
+                      <span className="text-2xl font-bold gradient-text">₹{monthlyBill}</span>
                     </div>
                   </div>
                 </div>
