@@ -6,6 +6,7 @@ import {
   BarChart3, 
   MessageSquare,
   Users,
+  UserCog,
   LogOut,
   Menu,
   X
@@ -15,6 +16,7 @@ import { cn } from "@/lib/utils";
 
 const adminNavItems = [
   { path: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { path: "/admin/students", label: "Students", icon: UserCog },
   { path: "/admin/add-menu", label: "Add Menu", icon: Plus },
   { path: "/admin/analytics", label: "Analytics", icon: BarChart3 },
   { path: "/admin/complaints", label: "Complaints", icon: MessageSquare },

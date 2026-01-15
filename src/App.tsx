@@ -18,6 +18,7 @@ import MealBooking from "./pages/MealBooking";
 import MyAccount from "./pages/MyAccount";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import StudentManagement from "./pages/admin/StudentManagement";
 import AddMenu from "./pages/admin/AddMenu";
 import Analytics from "./pages/admin/Analytics";
 import AdminComplaints from "./pages/admin/AdminComplaints";
@@ -49,6 +50,7 @@ const App = () => (
                 <Route path="/payment" element={<ProtectedRoute><Payment /></ProtectedRoute>} />
                 <Route path="/admin" element={<AdminLogin />} />
                 <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                <Route path="/admin/students" element={<StudentManagement />} />
                 <Route path="/admin/add-menu" element={<AddMenu />} />
                 <Route path="/admin/analytics" element={<Analytics />} />
                 <Route path="/admin/complaints" element={<AdminComplaints />} />
