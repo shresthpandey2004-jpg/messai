@@ -5,6 +5,9 @@ import { weeklyMenu, complaintTemplates, generateComplaint } from "@/data/mockDa
 import { toast } from "@/hooks/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { Sparkles, RefreshCw, Send, Copy, Check } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
 const AIComplaint = () => {
   const [selectedDish, setSelectedDish] = useState<string>("");
@@ -13,6 +16,7 @@ const AIComplaint = () => {
   const [customComplaint, setCustomComplaint] = useState<string>("");
   const [copied, setCopied] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const handleGenerate = () => {
     if (!selectedDish) {
@@ -36,12 +40,18 @@ const AIComplaint = () => {
           .slice(0, 2)
           .join(" ");
         
-        const fullComplaint = `${baseComplaint} ${additionalComplaints}\n\nI kindly request the mess administration to look into this matter and improve the food quality. Thank you.`;
+        const ratingText = rating === 1 ? "extremely poor" : rating === 2 ? "below average" : "average";
+        const fullComplaint = `Subject: Complaint regarding ${dish.name} (${dish.type})\n\nDear Mess Administration,\n\nI am writing to express my concern about the ${dish.name} served on ${dish.day}. The food quality was ${ratingText}. ${baseComplaint} ${additionalComplaints}\n\nI kindly request the mess administration to look into this matter and improve the food quality. Your prompt attention to this issue would be greatly appreciated.\n\nThank you for your understanding.\n\nRegards,\nStudent`;
         setGeneratedComplaint(fullComplaint);
         setCustomComplaint(fullComplaint);
       }
       setIsGenerating(false);
-    }, 1000);
+      
+      toast({
+        title: "Complaint Generated! ✨",
+        description: "AI has created a professional complaint for you"
+      });
+    }, 1500);
   };
 
   const handleCopy = () => {
@@ -55,10 +65,30 @@ const AIComplaint = () => {
   };
 
   const handleSubmit = () => {
+    if (!customComplaint) {
+      toast({
+        title: "No complaint to submit",
+        description: "Please generate a complaint first",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    setSubmitted(true);
     toast({
       title: "Complaint Submitted! 📝",
-      description: "Your complaint has been sent to the mess administration"
+      description: "Your complaint has been sent to the mess administration",
+      duration: 3000
     });
+    
+    // Reset after 2 seconds
+    setTimeout(() => {
+      setSelectedDish("");
+      setRating(2);
+      setGeneratedComplaint("");
+      setCustomComplaint("");
+      setSubmitted(false);
+    }, 2000);
   };
 
   const emojis = ['😠', '😕', '😐'];
@@ -88,22 +118,44 @@ const AIComplaint = () => {
               <label className="block text-sm font-medium text-foreground mb-3">
                 Select the dish you want to complain about
               </label>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {weeklyMenu.slice(0, 9).map((dish) => (
-                  <button
-                    key={dish.id}
-                    onClick={() => setSelectedDish(dish.id)}
-                    className={`p-3 rounded-xl border text-left transition-all ${
-                      selectedDish === dish.id
-                        ? 'border-primary bg-primary/10 shadow-md'
-                        : 'border-border bg-card hover:border-primary/50'
-                    }`}
-                  >
-                    <span className="text-xs text-muted-foreground">{dish.type}</span>
-                    <p className="font-medium text-foreground truncate">{dish.name}</p>
-                  </button>
-                ))}
-              </div>
+              
+              <Tabs defaultValue={days[new Date().getDay() === 0 ? 6 : new Date().getDay() - 1]} className="w-full">
+                <TabsList className="w-full flex flex-wrap justify-center gap-2 h-auto p-2 bg-muted/50 rounded-xl mb-4">
+                  {days.map((day) => (
+                    <TabsTrigger 
+                      key={day} 
+                      value={day}
+                      className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-lg px-3 py-1.5 text-xs"
+                    >
+                      {day.slice(0, 3)}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+                
+                {days.map((day) => {
+                  const dayMenu = weeklyMenu.filter(item => item.day === day);
+                  return (
+                    <TabsContent key={day} value={day}>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        {dayMenu.map((dish) => (
+                          <button
+                            key={dish.id}
+                            onClick={() => setSelectedDish(dish.id)}
+                            className={`p-3 rounded-xl border text-left transition-all ${
+                              selectedDish === dish.id
+                                ? 'border-primary bg-primary/10 shadow-md ring-2 ring-primary/50'
+                                : 'border-border bg-card hover:border-primary/50 hover:bg-muted/50'
+                            }`}
+                          >
+                            <span className="text-xs text-muted-foreground uppercase">{dish.type}</span>
+                            <p className="font-medium text-foreground text-sm mt-1">{dish.name}</p>
+                          </button>
+                        ))}
+                      </div>
+                    </TabsContent>
+                  );
+                })}
+              </Tabs>
             </div>
 
             {/* Rating Selection */}
@@ -181,6 +233,7 @@ const AIComplaint = () => {
                     variant="outline"
                     onClick={handleCopy}
                     className="gap-2"
+                    disabled={submitted}
                   >
                     {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                     {copied ? 'Copied!' : 'Copy'}
@@ -188,9 +241,10 @@ const AIComplaint = () => {
                   <Button
                     onClick={handleSubmit}
                     className="gap-2"
+                    disabled={submitted}
                   >
-                    <Send className="w-4 h-4" />
-                    Submit Complaint
+                    {submitted ? <Check className="w-4 h-4" /> : <Send className="w-4 h-4" />}
+                    {submitted ? 'Submitted!' : 'Submit Complaint'}
                   </Button>
                 </div>
               </div>
