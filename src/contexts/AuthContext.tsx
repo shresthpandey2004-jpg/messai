@@ -28,17 +28,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const savedUser = localStorage.getItem("messai_user");
     if (savedUser) {
       setUser(JSON.parse(savedUser));
-    } else {
-      // Default demo user
-      const defaultUser: User = {
-        name: "Rahul Sharma",
-        email: "rahul@college.edu",
-        roomNumber: "A-204",
-        role: "student"
-      };
-      setUser(defaultUser);
-      localStorage.setItem("messai_user", JSON.stringify(defaultUser));
     }
+    // No default user - user must login
   }, []);
 
   const login = (userData: User) => {

@@ -2,9 +2,11 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { MenuReactionProvider } from "@/contexts/MenuReactionContext";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
+import Login from "./pages/Login";
 import Index from "./pages/Index";
 import WeeklyMenu from "./pages/WeeklyMenu";
 import Feedback from "./pages/Feedback";
@@ -30,12 +32,13 @@ const App = () => (
         <AuthProvider>
           <MenuReactionProvider>
             <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/menu" element={<WeeklyMenu />} />
-              <Route path="/feedback" element={<Feedback />} />
-              <Route path="/complaint" element={<AIComplaint />} />
-              <Route path="/booking" element={<MealBooking />} />
-              <Route path="/account" element={<MyAccount />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
+              <Route path="/menu" element={<ProtectedRoute><WeeklyMenu /></ProtectedRoute>} />
+              <Route path="/feedback" element={<ProtectedRoute><Feedback /></ProtectedRoute>} />
+              <Route path="/complaint" element={<ProtectedRoute><AIComplaint /></ProtectedRoute>} />
+              <Route path="/booking" element={<ProtectedRoute><MealBooking /></ProtectedRoute>} />
+              <Route path="/account" element={<ProtectedRoute><MyAccount /></ProtectedRoute>} />
               <Route path="/admin" element={<AdminLogin />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
               <Route path="/admin/add-menu" element={<AddMenu />} />
