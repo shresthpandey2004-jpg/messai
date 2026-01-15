@@ -4,12 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { AddEditStudentModal } from "@/components/AddEditStudentModal";
+import { useStudents, Student } from "@/contexts/StudentContext";
 import {
   Search,
   Plus,
   Edit,
   Trash2,
-  Eye,
   Filter,
   Download,
   Upload,
@@ -28,95 +28,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-interface Student {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  roomNumber: string;
-  course: string;
-  year: string;
-  status: "active" | "inactive";
-  joinDate: string;
-  totalMeals: number;
-  pendingPayment: number;
-}
-
 const StudentManagement = () => {
+  const { students, addStudent, updateStudent, deleteStudent, toggleStudentStatus } = useStudents();
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState<"all" | "active" | "inactive">("all");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
-  const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
-
-  // Mock data
-  const [students, setStudents] = useState<Student[]>([
-    {
-      id: "1",
-      name: "Rahul Sharma",
-      email: "rahul.sharma@example.com",
-      phone: "+91 98765 43210",
-      roomNumber: "A-101",
-      course: "B.Tech CSE",
-      year: "3rd Year",
-      status: "active",
-      joinDate: "2024-01-15",
-      totalMeals: 248,
-      pendingPayment: 0,
-    },
-    {
-      id: "2",
-      name: "Priya Singh",
-      email: "priya.singh@example.com",
-      phone: "+91 98765 43211",
-      roomNumber: "B-205",
-      course: "B.Tech ECE",
-      year: "2nd Year",
-      status: "active",
-      joinDate: "2024-01-20",
-      totalMeals: 235,
-      pendingPayment: 3500,
-    },
-    {
-      id: "3",
-      name: "Amit Kumar",
-      email: "amit.kumar@example.com",
-      phone: "+91 98765 43212",
-      roomNumber: "A-304",
-      course: "MBA",
-      year: "1st Year",
-      status: "inactive",
-      joinDate: "2023-12-10",
-      totalMeals: 180,
-      pendingPayment: 7000,
-    },
-    {
-      id: "4",
-      name: "Sneha Patel",
-      email: "sneha.patel@example.com",
-      phone: "+91 98765 43213",
-      roomNumber: "C-102",
-      course: "B.Tech ME",
-      year: "4th Year",
-      status: "active",
-      joinDate: "2024-01-05",
-      totalMeals: 260,
-      pendingPayment: 0,
-    },
-    {
-      id: "5",
-      name: "Vikram Reddy",
-      email: "vikram.reddy@example.com",
-      phone: "+91 98765 43214",
-      roomNumber: "B-401",
-      course: "B.Tech IT",
-      year: "3rd Year",
-      status: "active",
-      joinDate: "2024-01-18",
-      totalMeals: 242,
-      pendingPayment: 0,
-    },
-  ]);
 
   const filteredStudents = students.filter((student) => {
     const matchesSearch =
@@ -131,39 +48,25 @@ const StudentManagement = () => {
   });
 
   const handleAddStudent = (studentData: Omit<Student, "id">) => {
-    const newStudent: Student = {
-      ...studentData,
-      id: Date.now().toString(),
-    };
-    setStudents([...students, newStudent]);
+    addStudent(studentData);
     toast.success("Student added successfully! ✅");
   };
 
   const handleEditStudent = (studentData: Omit<Student, "id">) => {
     if (editingStudent) {
-      setStudents(
-        students.map((s) =>
-          s.id === editingStudent.id ? { ...studentData, id: s.id } : s
-        )
-      );
+      updateStudent(editingStudent.id, studentData);
       toast.success("Student updated successfully! ✅");
       setEditingStudent(null);
     }
   };
 
   const handleDeleteStudent = (id: string) => {
-    setStudents(students.filter((s) => s.id !== id));
+    deleteStudent(id);
     toast.success("Student deleted successfully! 🗑️");
   };
 
   const handleToggleStatus = (id: string) => {
-    setStudents(
-      students.map((s) =>
-        s.id === id
-          ? { ...s, status: s.status === "active" ? "inactive" : "active" }
-          : s
-      )
-    );
+    toggleStudentStatus(id);
     toast.success("Student status updated! ✅");
   };
 

@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useStudents } from "@/contexts/StudentContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Utensils, Mail, Lock, User, Home, Sparkles, Calendar, MessageSquare, TrendingUp, Shield, Zap, CheckCircle2, ArrowRight, QrCode } from "lucide-react";
+import { Utensils, Mail, Lock, User, Home, Sparkles, Calendar, MessageSquare, TrendingUp, Shield, Zap, CheckCircle2, ArrowRight, QrCode, Phone, GraduationCap } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -14,6 +15,7 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { login } = useAuth();
+  const { addStudent, getStudentByEmail } = useStudents();
   const [isSignup, setIsSignup] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
@@ -22,6 +24,9 @@ const Login = () => {
     email: "",
     password: "",
     roomNumber: "",
+    phone: "",
+    course: "",
+    year: "1st Year",
   });
 
   // Check if coming from landing page with signup intent
@@ -47,8 +52,8 @@ const Login = () => {
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     if (isSignup) {
-      if (!formData.name || !formData.email || !formData.password || !formData.roomNumber) {
-        toast.error("Please fill all fields");
+      if (!formData.name || !formData.email || !formData.password || !formData.roomNumber || !formData.phone || !formData.course) {
+        toast.error("Please fill all required fields");
         setIsLoading(false);
         return;
       }
@@ -58,7 +63,30 @@ const Login = () => {
         setIsLoading(false);
         return;
       }
+
+      // Check if student already exists
+      const existingStudent = getStudentByEmail(formData.email);
+      if (existingStudent) {
+        toast.error("Email already registered!");
+        setIsLoading(false);
+        return;
+      }
       
+      // Add student to the system
+      addStudent({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        roomNumber: formData.roomNumber,
+        course: formData.course,
+        year: formData.year,
+        status: "active",
+        joinDate: new Date().toISOString().split("T")[0],
+        totalMeals: 0,
+        pendingPayment: 0,
+      });
+      
+      // Login the user
       login({
         name: formData.name,
         email: formData.email,
@@ -66,6 +94,7 @@ const Login = () => {
         role: "student"
       });
       
+      toast.success("Account created successfully! 🎉");
       navigate("/home");
     } else {
       if (!formData.email || !formData.password) {
@@ -246,16 +275,47 @@ const Login = () => {
                         className="h-11"
                       />
                     </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="room" className="flex items-center gap-2">
+                          <Home className="w-4 h-4" />
+                          Room Number
+                        </Label>
+                        <Input
+                          id="room"
+                          placeholder="e.g., A-204"
+                          value={formData.roomNumber}
+                          onChange={(e) => setFormData({ ...formData, roomNumber: e.target.value })}
+                          required={isSignup}
+                          className="h-11"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="phone" className="flex items-center gap-2">
+                          <Phone className="w-4 h-4" />
+                          Phone Number
+                        </Label>
+                        <Input
+                          id="phone"
+                          type="tel"
+                          placeholder="+91 98765 43210"
+                          value={formData.phone}
+                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                          required={isSignup}
+                          className="h-11"
+                        />
+                      </div>
+                    </div>
                     <div className="space-y-2">
-                      <Label htmlFor="room" className="flex items-center gap-2">
-                        <Home className="w-4 h-4" />
-                        Room Number
+                      <Label htmlFor="course" className="flex items-center gap-2">
+                        <GraduationCap className="w-4 h-4" />
+                        Course
                       </Label>
                       <Input
-                        id="room"
-                        placeholder="e.g., A-204"
-                        value={formData.roomNumber}
-                        onChange={(e) => setFormData({ ...formData, roomNumber: e.target.value })}
+                        id="course"
+                        placeholder="e.g., B.Tech CSE"
+                        value={formData.course}
+                        onChange={(e) => setFormData({ ...formData, course: e.target.value })}
                         required={isSignup}
                         className="h-11"
                       />
@@ -382,7 +442,7 @@ const Login = () => {
                   className="w-full h-11"
                   onClick={() => {
                     setIsSignup(!isSignup);
-                    setFormData({ name: "", email: "", password: "", roomNumber: "" });
+                    setFormData({ name: "", email: "", password: "", roomNumber: "", phone: "", course: "", year: "1st Year" });
                   }}
                 >
                   {isSignup ? "Login to existing account" : "Create new account"}
