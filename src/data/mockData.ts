@@ -40,40 +40,47 @@ export interface Booking {
 }
 
 export const weeklyMenu: MenuItem[] = [
-  // Monday
-  { id: '1', name: 'Poha', description: 'Light flattened rice with peanuts', type: 'breakfast', day: 'Monday', likes: 45, dislikes: 5 },
-  { id: '2', name: 'Dal Rice', description: 'Yellow dal with steamed rice', type: 'lunch', day: 'Monday', likes: 38, dislikes: 12 },
-  { id: '3', name: 'Paneer Butter Masala', description: 'Creamy paneer curry with naan', type: 'dinner', day: 'Monday', likes: 78, dislikes: 8, isSpecial: true },
+  // ==================== MONDAY ====================
+  { id: 'm1-breakfast', name: 'Poha', description: 'Light flattened rice with peanuts and curry leaves', type: 'breakfast', day: 'Monday', likes: 45, dislikes: 5 },
+  { id: 'm1-lunch', name: 'Dal Rice', description: 'Yellow dal with steamed rice and pickle', type: 'lunch', day: 'Monday', likes: 38, dislikes: 12 },
+  { id: 'm1-snacks', name: 'Samosa & Tea', description: 'Crispy potato samosa with hot chai', type: 'snacks', day: 'Monday', likes: 82, dislikes: 3 },
+  { id: 'm1-dinner', name: 'Paneer Butter Masala', description: 'Creamy paneer curry with naan and rice', type: 'dinner', day: 'Monday', likes: 78, dislikes: 8, isSpecial: true },
   
-  // Tuesday
-  { id: '4', name: 'Upma', description: 'Semolina breakfast with vegetables', type: 'breakfast', day: 'Tuesday', likes: 32, dislikes: 18 },
-  { id: '5', name: 'Rajma Chawal', description: 'Kidney beans curry with rice', type: 'lunch', day: 'Tuesday', likes: 65, dislikes: 10 },
-  { id: '6', name: 'Chole Bhature', description: 'Spiced chickpeas with fried bread', type: 'dinner', day: 'Tuesday', likes: 82, dislikes: 6 },
+  // ==================== TUESDAY ====================
+  { id: 't1-breakfast', name: 'Upma', description: 'Semolina breakfast with vegetables and coconut chutney', type: 'breakfast', day: 'Tuesday', likes: 32, dislikes: 18 },
+  { id: 't1-lunch', name: 'Rajma Chawal', description: 'Kidney beans curry with steamed rice', type: 'lunch', day: 'Tuesday', likes: 65, dislikes: 10 },
+  { id: 't1-snacks', name: 'Bread Pakora & Tea', description: 'Fried bread fritters with green chutney', type: 'snacks', day: 'Tuesday', likes: 58, dislikes: 8 },
+  { id: 't1-dinner', name: 'Chole Bhature', description: 'Spiced chickpeas with fried bread', type: 'dinner', day: 'Tuesday', likes: 82, dislikes: 6, isSpecial: true },
   
-  // Wednesday
-  { id: '7', name: 'Aloo Paratha', description: 'Stuffed potato flatbread with curd', type: 'breakfast', day: 'Wednesday', likes: 88, dislikes: 4, isSpecial: true },
-  { id: '8', name: 'Veg Biryani', description: 'Fragrant rice with mixed vegetables', type: 'lunch', day: 'Wednesday', likes: 72, dislikes: 15 },
-  { id: '9', name: 'Palak Paneer', description: 'Spinach curry with cottage cheese', type: 'dinner', day: 'Wednesday', likes: 55, dislikes: 20 },
+  // ==================== WEDNESDAY ====================
+  { id: 'w1-breakfast', name: 'Aloo Paratha', description: 'Stuffed potato flatbread with curd and butter', type: 'breakfast', day: 'Wednesday', likes: 88, dislikes: 4, isSpecial: true },
+  { id: 'w1-lunch', name: 'Veg Biryani', description: 'Fragrant rice with mixed vegetables and raita', type: 'lunch', day: 'Wednesday', likes: 72, dislikes: 15 },
+  { id: 'w1-snacks', name: 'Vada Pav & Tea', description: 'Spicy potato fritter in bun with chutney', type: 'snacks', day: 'Wednesday', likes: 75, dislikes: 5 },
+  { id: 'w1-dinner', name: 'Palak Paneer', description: 'Spinach curry with cottage cheese and roti', type: 'dinner', day: 'Wednesday', likes: 55, dislikes: 20 },
   
-  // Thursday
-  { id: '10', name: 'Idli Sambar', description: 'Steamed rice cakes with lentil soup', type: 'breakfast', day: 'Thursday', likes: 58, dislikes: 12 },
-  { id: '11', name: 'Kadhi Pakoda', description: 'Yogurt curry with gram flour fritters', type: 'lunch', day: 'Thursday', likes: 42, dislikes: 22 },
-  { id: '12', name: 'Mixed Veg', description: 'Seasonal vegetables with roti', type: 'dinner', day: 'Thursday', likes: 35, dislikes: 25 },
+  // ==================== THURSDAY ====================
+  { id: 'th1-breakfast', name: 'Idli Sambar', description: 'Steamed rice cakes with lentil soup and coconut chutney', type: 'breakfast', day: 'Thursday', likes: 58, dislikes: 12 },
+  { id: 'th1-lunch', name: 'Kadhi Pakoda', description: 'Yogurt curry with gram flour fritters and rice', type: 'lunch', day: 'Thursday', likes: 42, dislikes: 22 },
+  { id: 'th1-snacks', name: 'Aloo Tikki & Tea', description: 'Crispy potato patties with tamarind chutney', type: 'snacks', day: 'Thursday', likes: 68, dislikes: 7 },
+  { id: 'th1-dinner', name: 'Mixed Veg Curry', description: 'Seasonal vegetables curry with roti and dal', type: 'dinner', day: 'Thursday', likes: 35, dislikes: 25 },
   
-  // Friday
-  { id: '13', name: 'Dosa', description: 'Crispy rice crepe with chutney', type: 'breakfast', day: 'Friday', likes: 75, dislikes: 8 },
-  { id: '14', name: 'Pav Bhaji', description: 'Spiced vegetable mash with bread rolls', type: 'lunch', day: 'Friday', likes: 90, dislikes: 5, isSpecial: true },
-  { id: '15', name: 'Dal Makhani', description: 'Creamy black lentils with butter', type: 'dinner', day: 'Friday', likes: 68, dislikes: 12 },
+  // ==================== FRIDAY ====================
+  { id: 'f1-breakfast', name: 'Masala Dosa', description: 'Crispy rice crepe with potato filling and sambar', type: 'breakfast', day: 'Friday', likes: 75, dislikes: 8 },
+  { id: 'f1-lunch', name: 'Pav Bhaji', description: 'Spiced vegetable mash with buttered bread rolls', type: 'lunch', day: 'Friday', likes: 90, dislikes: 5, isSpecial: true },
+  { id: 'f1-snacks', name: 'Paneer Pakora & Tea', description: 'Fried cottage cheese fritters with mint chutney', type: 'snacks', day: 'Friday', likes: 85, dislikes: 4 },
+  { id: 'f1-dinner', name: 'Dal Makhani', description: 'Creamy black lentils with butter, naan and rice', type: 'dinner', day: 'Friday', likes: 68, dislikes: 12 },
   
-  // Saturday
-  { id: '16', name: 'Puri Bhaji', description: 'Deep fried bread with potato curry', type: 'breakfast', day: 'Saturday', likes: 70, dislikes: 10 },
-  { id: '17', name: 'Samosa', description: 'Crispy potato pastries', type: 'lunch', day: 'Saturday', likes: 85, dislikes: 5, isSpecial: true },
-  { id: '18', name: 'Jeera Rice & Gravy', description: 'Cumin rice with vegetable gravy', type: 'dinner', day: 'Saturday', likes: 45, dislikes: 15 },
+  // ==================== SATURDAY ====================
+  { id: 's1-breakfast', name: 'Puri Bhaji', description: 'Deep fried bread with spicy potato curry', type: 'breakfast', day: 'Saturday', likes: 70, dislikes: 10 },
+  { id: 's1-lunch', name: 'Chole Kulche', description: 'Chickpea curry with soft leavened bread', type: 'lunch', day: 'Saturday', likes: 78, dislikes: 8 },
+  { id: 's1-snacks', name: 'Samosa Chaat & Tea', description: 'Crushed samosa with yogurt and chutneys', type: 'snacks', day: 'Saturday', likes: 88, dislikes: 3, isSpecial: true },
+  { id: 's1-dinner', name: 'Jeera Rice & Gravy', description: 'Cumin rice with mixed vegetable gravy and dal', type: 'dinner', day: 'Saturday', likes: 45, dislikes: 15 },
   
-  // Sunday
-  { id: '19', name: 'Chole Kulche', description: 'Chickpeas with soft bread', type: 'breakfast', day: 'Sunday', likes: 78, dislikes: 8 },
-  { id: '20', name: 'Special Thali', description: 'Complete meal with variety', type: 'lunch', day: 'Sunday', likes: 95, dislikes: 3, isSpecial: true },
-  { id: '21', name: 'Gulab Jamun', description: 'Sweet dessert balls in syrup', type: 'dinner', day: 'Sunday', likes: 98, dislikes: 2, isSpecial: true },
+  // ==================== SUNDAY ====================
+  { id: 'su1-breakfast', name: 'Chole Bhature', description: 'Chickpeas curry with fried bread (Sunday special)', type: 'breakfast', day: 'Sunday', likes: 92, dislikes: 5, isSpecial: true },
+  { id: 'su1-lunch', name: 'Special Thali', description: 'Complete meal with variety - dal, sabzi, rice, roti, sweet', type: 'lunch', day: 'Sunday', likes: 95, dislikes: 3, isSpecial: true },
+  { id: 'su1-snacks', name: 'Jalebi & Tea', description: 'Sweet crispy spirals with hot masala chai', type: 'snacks', day: 'Sunday', likes: 94, dislikes: 2, isSpecial: true },
+  { id: 'su1-dinner', name: 'Gulab Jamun & Ice Cream', description: 'Sweet dessert balls in syrup with vanilla ice cream', type: 'dinner', day: 'Sunday', likes: 98, dislikes: 2, isSpecial: true },
 ];
 
 export const complaintTemplates = [
