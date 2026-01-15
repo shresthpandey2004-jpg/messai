@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
-import { weeklyMenu, MenuItem } from "@/data/mockData";
+import { getTodaysMenu, MenuItem } from "@/data/mockData";
 import { toast } from "@/hooks/use-toast";
 import { Send, Check } from "lucide-react";
 
@@ -13,7 +13,8 @@ const Feedback = () => {
   const [feedback, setFeedback] = useState<FeedbackState>({});
   const [submitted, setSubmitted] = useState<string[]>([]);
   
-  const todayMenu = weeklyMenu.slice(0, 6); // Show some items for feedback
+  // Get today's menu items (all 4 meals for current day)
+  const todayMenu = getTodaysMenu();
 
   const handleRating = (itemId: string, rating: number) => {
     setFeedback(prev => ({ ...prev, [itemId]: rating }));
@@ -57,10 +58,13 @@ const Feedback = () => {
         <div className="container mx-auto max-w-4xl">
           <div className="text-center mb-10">
             <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Rate Your <span className="gradient-text">Meals</span>
+              Rate <span className="gradient-text">Today's Meals</span>
             </h1>
             <p className="text-muted-foreground">
               Your feedback helps us improve the mess quality
+            </p>
+            <p className="text-sm text-muted-foreground mt-2">
+              Showing {todayMenu.length} meals for {new Date().toLocaleDateString('en-US', { weekday: 'long' })}
             </p>
           </div>
           
