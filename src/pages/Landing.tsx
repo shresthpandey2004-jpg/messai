@@ -20,9 +20,15 @@ import {
   Smartphone,
   BarChart3
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Landing = () => {
+  const navigate = useNavigate();
+
+  const handleCreateAccount = () => {
+    navigate("/login", { state: { isSignup: true } });
+  };
+
   const features = [
     {
       icon: Calendar,
@@ -132,12 +138,15 @@ const Landing = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-              <Link to="/login" className="w-full sm:w-auto">
-                <Button variant="hero" size="lg" className="w-full sm:w-auto gap-2 text-lg h-14 px-8">
-                  Create Account
-                  <ChevronRight className="w-5 h-5" />
-                </Button>
-              </Link>
+              <Button 
+                variant="hero" 
+                size="lg" 
+                className="w-full sm:w-auto gap-2 text-lg h-14 px-8"
+                onClick={handleCreateAccount}
+              >
+                Create Account
+                <ChevronRight className="w-5 h-5" />
+              </Button>
               <Link to="/login" className="w-full sm:w-auto">
                 <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg h-14 px-8">
                   Login to Account
@@ -272,12 +281,15 @@ const Landing = () => {
               Join hundreds of students already using MessAI for a better hostel life
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link to="/login" className="w-full sm:w-auto">
-                <Button variant="hero" size="lg" className="w-full sm:w-auto gap-2 text-lg h-14 px-8">
-                  Create Free Account
-                  <ArrowRight className="w-5 h-5" />
-                </Button>
-              </Link>
+              <Button 
+                variant="hero" 
+                size="lg" 
+                className="w-full sm:w-auto gap-2 text-lg h-14 px-8"
+                onClick={handleCreateAccount}
+              >
+                Create Free Account
+                <ArrowRight className="w-5 h-5" />
+              </Button>
             </div>
             <p className="text-sm text-muted-foreground">
               No credit card required • Free forever • Setup in 2 minutes

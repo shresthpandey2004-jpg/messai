@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
   const [isSignup, setIsSignup] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -22,6 +23,13 @@ const Login = () => {
     password: "",
     roomNumber: "",
   });
+
+  // Check if coming from landing page with signup intent
+  useEffect(() => {
+    if (location.state?.isSignup) {
+      setIsSignup(true);
+    }
+  }, [location]);
 
   const getPasswordStrength = (password: string) => {
     if (password.length === 0) return { strength: 0, label: "", color: "" };
