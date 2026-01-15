@@ -1,7 +1,8 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
 import { 
   Home, 
   Calendar, 
@@ -26,16 +27,12 @@ const navItems = [
 
 export const Navbar = () => {
   const location = useLocation();
-  const navigate = useNavigate();
+  const { logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
-    if (confirm("Are you sure you want to logout?")) {
-      localStorage.clear();
-      sessionStorage.clear();
-      navigate("/");
-      setMobileMenuOpen(false);
-    }
+    setMobileMenuOpen(false);
+    logout();
   };
 
   return (

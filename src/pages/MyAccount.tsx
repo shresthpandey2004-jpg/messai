@@ -1,43 +1,20 @@
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
+import { EditProfileModal } from "@/components/EditProfileModal";
+import { useAuth } from "@/contexts/AuthContext";
 import { mockUser } from "@/data/mockData";
-import { User, Mail, Home, Calendar, CreditCard, Check, X, Download, LogOut } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { User, Mail, Home, Calendar, CreditCard, Check, X, Download, LogOut, Edit } from "lucide-react";
 import { useState } from "react";
 
 const MyAccount = () => {
-  const navigate = useNavigate();
-  const [isEditing, setIsEditing] = useState(false);
+  const { user, logout } = useAuth();
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const attendanceRate = mockUser.attendance.filter(a => a.present).length / mockUser.attendance.length * 100;
-
-  const handleEditProfile = () => {
-    setIsEditing(true);
-    // Navigate to edit profile page or show modal
-    const editName = prompt("Enter new name:", mockUser.name);
-    const editEmail = prompt("Enter new email:", mockUser.email);
-    const editRoom = prompt("Enter new room number:", mockUser.roomNumber);
-    
-    if (editName || editEmail || editRoom) {
-      alert("Profile updated successfully! (This is a demo - in production, this would save to backend)");
-      setIsEditing(false);
-    }
-  };
-
-  const handleLogout = () => {
-    const confirmLogout = window.confirm("Are you sure you want to logout?");
-    if (confirmLogout) {
-      // Clear any stored user data/tokens here
-      localStorage.clear();
-      sessionStorage.clear();
-      alert("Logged out successfully!");
-      // Redirect to home page
-      navigate("/");
-    }
-  };
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
+      <EditProfileModal open={isEditModalOpen} onOpenChange={setIsEditModalOpen} />
       
       <main className="pt-24 pb-16 px-4">
         <div className="container mx-auto max-w-4xl">
@@ -56,27 +33,36 @@ const MyAccount = () => {
               <div className="glass-card p-6 text-center">
                 <div className="w-24 h-24 rounded-full gradient-bg flex items-center justify-center mx-auto mb-4">
                   <span className="text-4xl text-primary-foreground font-bold">
-                    {mockUser.name.charAt(0)}
+                    {user?.name.charAt(0) || "U"}
                   </span>
                 </div>
-                <h2 className="text-xl font-semibold text-foreground">{mockUser.name}</h2>
+                <h2 className="text-xl font-semibold text-foreground">{user?.name || "User"}</h2>
                 <p className="text-sm text-muted-foreground mt-1">Student</p>
                 
                 <div className="mt-6 space-y-3 text-left">
                   <div className="flex items-center gap-3 text-sm">
                     <Mail className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-foreground">{mockUser.email}</span>
+                    <span className="text-foreground">{user?.email || "email@example.com"}</span>
                   </div>
                   <div className="flex items-center gap-3 text-sm">
                     <Home className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-foreground">Room {mockUser.roomNumber}</span>
+                    <span className="text-foreground">Room {user?.roomNumber || "N/A"}</span>
                   </div>
                 </div>
                 
-                <Button variant="outline" className="w-full mt-6" onClick={handleEditProfile}>
+                <Button 
+                  variant="outline" 
+                  className="w-full mt-6 gap-2" 
+                  onClick={() => setIsEditModalOpen(true)}
+                >
+                  <Edit className="w-4 h-4" />
                   Edit Profile
                 </Button>
-                <Button variant="destructive" className="w-full mt-3 gap-2" onClick={handleLogout}>
+                <Button 
+                  variant="destructive" 
+                  className="w-full mt-3 gap-2" 
+                  onClick={logout}
+                >
                   <LogOut className="w-4 h-4" />
                   Logout
                 </Button>
