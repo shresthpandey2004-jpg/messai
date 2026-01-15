@@ -1,10 +1,39 @@
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { mockUser } from "@/data/mockData";
-import { User, Mail, Home, Calendar, CreditCard, Check, X, Download } from "lucide-react";
+import { User, Mail, Home, Calendar, CreditCard, Check, X, Download, LogOut } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const MyAccount = () => {
+  const navigate = useNavigate();
+  const [isEditing, setIsEditing] = useState(false);
   const attendanceRate = mockUser.attendance.filter(a => a.present).length / mockUser.attendance.length * 100;
+
+  const handleEditProfile = () => {
+    setIsEditing(true);
+    // Navigate to edit profile page or show modal
+    const editName = prompt("Enter new name:", mockUser.name);
+    const editEmail = prompt("Enter new email:", mockUser.email);
+    const editRoom = prompt("Enter new room number:", mockUser.roomNumber);
+    
+    if (editName || editEmail || editRoom) {
+      alert("Profile updated successfully! (This is a demo - in production, this would save to backend)");
+      setIsEditing(false);
+    }
+  };
+
+  const handleLogout = () => {
+    const confirmLogout = window.confirm("Are you sure you want to logout?");
+    if (confirmLogout) {
+      // Clear any stored user data/tokens here
+      localStorage.clear();
+      sessionStorage.clear();
+      alert("Logged out successfully!");
+      // Redirect to home page
+      navigate("/");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -44,8 +73,12 @@ const MyAccount = () => {
                   </div>
                 </div>
                 
-                <Button variant="outline" className="w-full mt-6">
+                <Button variant="outline" className="w-full mt-6" onClick={handleEditProfile}>
                   Edit Profile
+                </Button>
+                <Button variant="destructive" className="w-full mt-3 gap-2" onClick={handleLogout}>
+                  <LogOut className="w-4 h-4" />
+                  Logout
                 </Button>
               </div>
             </div>

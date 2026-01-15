@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -11,7 +11,8 @@ import {
   User, 
   Shield,
   Menu,
-  X
+  X,
+  LogOut
 } from "lucide-react";
 
 const navItems = [
@@ -25,7 +26,17 @@ const navItems = [
 
 export const Navbar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const handleLogout = () => {
+    if (confirm("Are you sure you want to logout?")) {
+      localStorage.clear();
+      sessionStorage.clear();
+      navigate("/");
+      setMobileMenuOpen(false);
+    }
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass-card border-b border-border/50">
@@ -66,6 +77,15 @@ export const Navbar = () => {
                 Admin
               </Button>
             </Link>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="ml-2 gap-2 text-destructive hover:text-destructive hover:bg-destructive/10"
+              onClick={handleLogout}
+            >
+              <LogOut className="w-4 h-4" />
+              Logout
+            </Button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -104,6 +124,14 @@ export const Navbar = () => {
                   Admin Panel
                 </Button>
               </Link>
+              <Button 
+                variant="ghost" 
+                className="w-full justify-start gap-3 mt-2 text-destructive hover:text-destructive hover:bg-destructive/10"
+                onClick={handleLogout}
+              >
+                <LogOut className="w-5 h-5" />
+                Logout
+              </Button>
             </div>
           </div>
         )}
