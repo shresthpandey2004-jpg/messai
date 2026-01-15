@@ -22,6 +22,7 @@ import Analytics from "./pages/admin/Analytics";
 import AdminComplaints from "./pages/admin/AdminComplaints";
 import AdminAttendance from "./pages/admin/AdminAttendance";
 import NotFound from "./pages/NotFound";
+import Payment from "./pages/Payment";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,7 @@ const App = () => (
               <Route path="/complaint" element={<ProtectedRoute><AIComplaint /></ProtectedRoute>} />
               <Route path="/booking" element={<ProtectedRoute><MealBooking /></ProtectedRoute>} />
               <Route path="/account" element={<ProtectedRoute><MyAccount /></ProtectedRoute>} />
+              <Route path="/payment" element={<ProtectedRoute><Payment /></ProtectedRoute>} />
               <Route path="/admin" element={<AdminLogin />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
               <Route path="/admin/add-menu" element={<AddMenu />} />

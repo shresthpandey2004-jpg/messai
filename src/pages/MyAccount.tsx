@@ -3,9 +3,9 @@ import { Button } from "@/components/ui/button";
 import { EditProfileModal } from "@/components/EditProfileModal";
 import { useAuth } from "@/contexts/AuthContext";
 import { mockUser } from "@/data/mockData";
-import { User, Mail, Home, Calendar, CreditCard, Check, X, Download, LogOut, Edit, TrendingUp, Bell, QrCode, Utensils, Award, Clock, DollarSign, ChevronRight } from "lucide-react";
+import { Mail, Home, Calendar, CreditCard, Check, X, Download, LogOut, Edit, TrendingUp, Bell, QrCode, Utensils, Award, Clock, DollarSign, ChevronRight } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import {
   Card,
@@ -18,6 +18,7 @@ import { Badge } from "@/components/ui/badge";
 
 const MyAccount = () => {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [showQR, setShowQR] = useState(false);
   const attendanceRate = mockUser.attendance.filter(a => a.present).length / mockUser.attendance.length * 100;
@@ -46,7 +47,12 @@ const MyAccount = () => {
   };
 
   const handlePayNow = () => {
-    toast.success("Redirecting to payment gateway... 💳");
+    navigate("/payment", { 
+      state: { 
+        amount: mockUser.monthlyBill, 
+        billMonth: "December 2024" 
+      } 
+    });
   };
 
   const handleShowQR = () => {
