@@ -2,6 +2,7 @@ import { MenuItem } from "@/data/mockData";
 import { ThumbsUp, ThumbsDown, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useMenuReaction } from "@/contexts/MenuReactionContext";
+import { useLikeDislike } from "@/contexts/LikeDislikeContext";
 
 interface MenuCardProps {
   item: MenuItem;
@@ -24,9 +25,19 @@ export const MenuCard = ({ item, showFeedback = false }: MenuCardProps) => {
     getTotalReactions 
   } = useMenuReaction();
   
+  const {
+    userVotes,
+    toggleLike,
+    toggleDislike,
+    getLikes,
+    getDislikes
+  } = useLikeDislike();
+  
   const userReaction = getUserReaction(item.id);
   const totalReactions = getTotalReactions(item.id);
-  const popularity = item.likes / (item.likes + item.dislikes) * 100;
+  const currentLikes = getLikes(item.id, item.likes);
+  const currentDislikes = getDislikes(item.id, item.dislikes);
+  const popularity = currentLikes / (currentLikes + currentDislikes) * 100;
   
   return (
     <div className={cn(
@@ -65,14 +76,26 @@ export const MenuCard = ({ item, showFeedback = false }: MenuCardProps) => {
         
         {/* Stats */}
         <div className="flex items-center gap-4 text-sm">
-          <span className="flex items-center gap-1 text-primary">
-            <ThumbsUp className="w-4 h-4" />
-            {item.likes}
-          </span>
-          <span className="flex items-center gap-1 text-destructive">
-            <ThumbsDown className="w-4 h-4" />
-            {item.dislikes}
-          </span>
+          <button
+            onClick={() => toggleLike(item.id, item.likes, item.dislikes)}
+            className={cn(
+              "flex items-center gap-1 transition-all hover:scale-110",
+              userVotes[item.id] === "like" ? "text-primary font-bold" : "text-muted-foreground hover:text-primary"
+            )}
+          >
+            <ThumbsUp className={cn("w-4 h-4", userVotes[item.id] === "like" && "fill-primary")} />
+            {currentLikes}
+          </button>
+          <button
+            onClick={() => toggleDislike(item.id, item.likes, item.dislikes)}
+            className={cn(
+              "flex items-center gap-1 transition-all hover:scale-110",
+              userVotes[item.id] === "dislike" ? "text-destructive font-bold" : "text-muted-foreground hover:text-destructive"
+            )}
+          >
+            <ThumbsDown className={cn("w-4 h-4", userVotes[item.id] === "dislike" && "fill-destructive")} />
+            {currentDislikes}
+          </button>
         </div>
         
         {/* Feedback Buttons */}
