@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Utensils, Mail, Lock, User, Home, Sparkles, TrendingUp, Shield, Zap, Star, CheckCircle2, ArrowRight } from "lucide-react";
+import { Utensils, Mail, Lock, User, Home, Sparkles, Calendar, MessageSquare, TrendingUp, Shield, Zap, CheckCircle2, ArrowRight, QrCode } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -36,7 +36,6 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     if (isSignup) {
@@ -68,7 +67,7 @@ const Login = () => {
       }
       
       login({
-        name: "Rahul Sharma",
+        name: "Student",
         email: formData.email,
         roomNumber: "A-204",
         role: "student"
@@ -81,29 +80,57 @@ const Login = () => {
   };
 
   const features = [
-    { icon: Sparkles, title: "AI Powered", desc: "Smart complaint generation", color: "text-purple-500" },
-    { icon: TrendingUp, title: "Analytics", desc: "Track your meal patterns", color: "text-blue-500" },
-    { icon: Shield, title: "Secure", desc: "Your data is protected", color: "text-green-500" },
-    { icon: Zap, title: "Fast", desc: "Lightning quick access", color: "text-yellow-500" },
-  ];
-
-  const testimonials = [
-    { name: "Priya S.", text: "Best mess management system ever!", rating: 5 },
-    { name: "Arjun K.", text: "Love the AI complaint feature!", rating: 5 },
+    { 
+      icon: Calendar, 
+      title: "Weekly Menu", 
+      desc: "View complete weekly meal schedule with all 4 meals per day",
+      color: "from-blue-500 to-cyan-500"
+    },
+    { 
+      icon: MessageSquare, 
+      title: "Feedback System", 
+      desc: "Rate meals with emoji reactions and provide detailed feedback",
+      color: "from-purple-500 to-pink-500"
+    },
+    { 
+      icon: Sparkles, 
+      title: "AI Complaints", 
+      desc: "Generate professional complaints automatically using AI",
+      color: "from-orange-500 to-red-500"
+    },
+    { 
+      icon: QrCode, 
+      title: "QR Entry", 
+      desc: "Quick mess entry with personalized QR code scanning",
+      color: "from-green-500 to-emerald-500"
+    },
+    { 
+      icon: TrendingUp, 
+      title: "Analytics", 
+      desc: "Track your meal patterns, attendance and spending habits",
+      color: "from-indigo-500 to-purple-500"
+    },
+    { 
+      icon: Shield, 
+      title: "Secure Payments", 
+      desc: "Safe and encrypted payment processing for monthly bills",
+      color: "from-teal-500 to-cyan-500"
+    },
   ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-accent/10 relative overflow-hidden">
-      {/* Animated Background Elements */}
+      {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
       </div>
 
       <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
         <div className="w-full max-w-6xl grid lg:grid-cols-2 gap-8 items-center">
-          {/* Left Side - Enhanced Branding */}
+          {/* Left Side - Features */}
           <div className="hidden lg:block space-y-8">
+            {/* Header */}
             <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <div className="w-16 h-16 rounded-2xl gradient-bg flex items-center justify-center shadow-lg">
@@ -116,85 +143,85 @@ const Login = () => {
               </div>
               
               <h2 className="text-4xl font-bold text-foreground leading-tight">
-                Welcome to the Future of{" "}
-                <span className="gradient-text">Mess Management</span>
+                Manage Your Mess Experience{" "}
+                <span className="gradient-text">Effortlessly</span>
               </h2>
               <p className="text-muted-foreground text-lg">
-                AI-powered system to revolutionize your hostel mess experience. Seamlessly manage everything from one place.
+                Complete digital solution for hostel mess management. Everything you need in one powerful platform.
               </p>
             </div>
 
-            {/* Feature Grid */}
-            <div className="grid grid-cols-2 gap-4">
-              {features.map((feature, idx) => (
-                <div
-                  key={idx}
-                  className="glass-card p-4 hover:scale-105 transition-transform cursor-pointer group"
-                >
-                  <feature.icon className={cn("w-8 h-8 mb-2", feature.color)} />
-                  <h3 className="font-semibold text-foreground">{feature.title}</h3>
-                  <p className="text-sm text-muted-foreground">{feature.desc}</p>
-                </div>
-              ))}
-            </div>
-
-            {/* Stats */}
-            <div className="glass-card p-6">
-              <div className="grid grid-cols-3 gap-4 text-center">
-                <div>
-                  <div className="text-3xl font-bold gradient-text">500+</div>
-                  <div className="text-sm text-muted-foreground">Active Users</div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold gradient-text">28</div>
-                  <div className="text-sm text-muted-foreground">Weekly Meals</div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold gradient-text">4.9</div>
-                  <div className="text-sm text-muted-foreground flex items-center justify-center gap-1">
-                    <Star className="w-3 h-3 fill-yellow-500 text-yellow-500" />
-                    Rating
+            {/* Features Grid */}
+            <div className="space-y-4">
+              <h3 className="text-xl font-semibold text-foreground">Key Features</h3>
+              <div className="grid gap-4">
+                {features.map((feature, idx) => (
+                  <div
+                    key={idx}
+                    className="glass-card p-4 hover:scale-[1.02] transition-all cursor-pointer group"
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className={cn(
+                        "w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0",
+                        "bg-gradient-to-br shadow-lg group-hover:scale-110 transition-transform",
+                        feature.color
+                      )}>
+                        <feature.icon className="w-6 h-6 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-foreground mb-1">{feature.title}</h4>
+                        <p className="text-sm text-muted-foreground">{feature.desc}</p>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                ))}
               </div>
             </div>
 
-            {/* Testimonials */}
-            <div className="space-y-3">
-              {testimonials.map((testimonial, idx) => (
-                <div key={idx} className="glass-card p-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-yellow-500 text-yellow-500" />
-                    ))}
-                  </div>
-                  <p className="text-sm text-foreground italic">"{testimonial.text}"</p>
-                  <p className="text-xs text-muted-foreground mt-2">- {testimonial.name}</p>
+            {/* Quick Stats */}
+            <div className="glass-card p-6">
+              <h3 className="text-lg font-semibold text-foreground mb-4">What You Get</h3>
+              <div className="grid grid-cols-3 gap-4 text-center">
+                <div>
+                  <div className="text-3xl font-bold gradient-text">28</div>
+                  <div className="text-xs text-muted-foreground mt-1">Weekly Meals</div>
                 </div>
-              ))}
+                <div>
+                  <div className="text-3xl font-bold gradient-text">4</div>
+                  <div className="text-xs text-muted-foreground mt-1">Meals Per Day</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold gradient-text">24/7</div>
+                  <div className="text-xs text-muted-foreground mt-1">Access</div>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Right Side - Enhanced Form */}
+          {/* Right Side - Form */}
           <Card className="w-full shadow-2xl border-2">
             <CardHeader className="text-center space-y-4">
+              {/* Mobile Logo */}
               <div className="lg:hidden flex items-center justify-center gap-2">
                 <div className="w-12 h-12 rounded-xl gradient-bg flex items-center justify-center">
                   <Utensils className="w-6 h-6 text-primary-foreground" />
                 </div>
                 <span className="text-2xl font-bold gradient-text">MessAI</span>
               </div>
+              
               <CardTitle className="text-3xl">
                 {isSignup ? "Create Account" : "Welcome Back"}
               </CardTitle>
               <CardDescription className="text-base">
                 {isSignup 
-                  ? "Join thousands of students managing their mess experience" 
+                  ? "Join MessAI to start managing your mess experience" 
                   : "Login to access your personalized mess dashboard"}
               </CardDescription>
             </CardHeader>
+            
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Signup Fields */}
                 {isSignup && (
                   <>
                     <div className="space-y-2">
@@ -228,6 +255,7 @@ const Login = () => {
                   </>
                 )}
                 
+                {/* Email */}
                 <div className="space-y-2">
                   <Label htmlFor="email" className="flex items-center gap-2">
                     <Mail className="w-4 h-4" />
@@ -244,6 +272,7 @@ const Login = () => {
                   />
                 </div>
                 
+                {/* Password */}
                 <div className="space-y-2">
                   <Label htmlFor="password" className="flex items-center gap-2">
                     <Lock className="w-4 h-4" />
@@ -258,6 +287,7 @@ const Login = () => {
                     required
                     className="h-11"
                   />
+                  {/* Password Strength */}
                   {isSignup && formData.password && (
                     <div className="space-y-1">
                       <div className="flex justify-between text-xs">
@@ -279,6 +309,7 @@ const Login = () => {
                   )}
                 </div>
 
+                {/* Remember Me & Forgot Password */}
                 {!isSignup && (
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
@@ -304,6 +335,7 @@ const Login = () => {
                   </div>
                 )}
 
+                {/* Submit Button */}
                 <Button 
                   type="submit" 
                   className="w-full h-11 text-base" 
@@ -323,6 +355,7 @@ const Login = () => {
                   )}
                 </Button>
 
+                {/* Divider */}
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
                     <span className="w-full border-t" />
@@ -334,6 +367,7 @@ const Login = () => {
                   </div>
                 </div>
 
+                {/* Toggle Button */}
                 <Button
                   type="button"
                   variant="outline"
@@ -346,6 +380,7 @@ const Login = () => {
                   {isSignup ? "Login to existing account" : "Create new account"}
                 </Button>
 
+                {/* Demo Info */}
                 {!isSignup && (
                   <div className="text-center">
                     <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-3 py-2 rounded-lg text-xs">
