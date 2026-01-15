@@ -461,6 +461,20 @@ const Payment = () => {
                         </p>
                       </div>
 
+                      {/* Terms and Conditions */}
+                      <div className="pt-4 border-t border-border">
+                        <div className="flex items-start gap-3">
+                          <Checkbox
+                            id="terms-upi"
+                            checked={termsAccepted}
+                            onCheckedChange={(checked) => setTermsAccepted(checked as boolean)}
+                          />
+                          <label htmlFor="terms-upi" className="text-sm text-muted-foreground cursor-pointer">
+                            I agree to the terms and conditions and authorize MessAI to debit ₹{amount} from my account
+                          </label>
+                        </div>
+                      </div>
+
                       <Button
                         className="w-full"
                         size="lg"
@@ -557,6 +571,20 @@ const Payment = () => {
                         </div>
                       </div>
 
+                      {/* Terms and Conditions */}
+                      <div className="pt-4 border-t border-border">
+                        <div className="flex items-start gap-3">
+                          <Checkbox
+                            id="terms-card"
+                            checked={termsAccepted}
+                            onCheckedChange={(checked) => setTermsAccepted(checked as boolean)}
+                          />
+                          <label htmlFor="terms-card" className="text-sm text-muted-foreground cursor-pointer">
+                            I agree to the terms and conditions and authorize MessAI to debit ₹{amount} from my account
+                          </label>
+                        </div>
+                      </div>
+
                       <Button
                         className="w-full"
                         size="lg"
@@ -601,25 +629,25 @@ const Payment = () => {
                         </button>
                       ))}
                     </div>
+
+                    {/* Terms and Conditions */}
+                    <div className="pt-4 border-t border-border">
+                      <div className="flex items-start gap-3">
+                        <Checkbox
+                          id="terms-netbanking"
+                          checked={termsAccepted}
+                          onCheckedChange={(checked) => setTermsAccepted(checked as boolean)}
+                        />
+                        <label htmlFor="terms-netbanking" className="text-sm text-muted-foreground cursor-pointer">
+                          I agree to the terms and conditions and authorize MessAI to debit ₹{amount} from my account
+                        </label>
+                      </div>
+                    </div>
                   </TabsContent>
                 </Tabs>
 
-                {/* Terms and Conditions */}
-                <div className="mt-6 pt-6 border-t border-border">
-                  <div className="flex items-start gap-3">
-                    <Checkbox
-                      id="terms"
-                      checked={termsAccepted}
-                      onCheckedChange={(checked) => setTermsAccepted(checked as boolean)}
-                    />
-                    <label htmlFor="terms" className="text-sm text-muted-foreground cursor-pointer">
-                      I agree to the terms and conditions and authorize MessAI to debit ₹{amount} from my account
-                    </label>
-                  </div>
-                </div>
-
                 {/* Security Info */}
-                <div className="mt-4 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                <div className="mt-6 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
                   <div className="flex items-start gap-3">
                     <Shield className="w-5 h-5 text-blue-600 mt-0.5" />
                     <div className="text-sm">
