@@ -112,12 +112,15 @@ const Landing = () => {
                   Login
                 </Button>
               </Link>
-              <Link to="/login">
-                <Button variant="hero" size="lg" className="gap-2">
-                  Get Started
-                  <ArrowRight className="w-4 h-4" />
-                </Button>
-              </Link>
+              <Button 
+                variant="hero" 
+                size="lg" 
+                className="gap-2"
+                onClick={handleCreateAccount}
+              >
+                Get Started
+                <ArrowRight className="w-4 h-4" />
+              </Button>
             </div>
           </nav>
 
