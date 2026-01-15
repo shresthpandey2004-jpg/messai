@@ -94,9 +94,9 @@ const Landing = () => {
           <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
         </div>
 
-        <div className="relative z-10 container mx-auto px-4 py-20">
+        <div className="relative z-10 container mx-auto px-4 py-12">
           {/* Navbar */}
-          <nav className="flex items-center justify-between mb-20">
+          <nav className="flex items-center justify-between mb-12">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-xl gradient-bg flex items-center justify-center shadow-lg">
                 <Utensils className="w-6 h-6 text-primary-foreground" />
