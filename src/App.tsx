@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { MenuReactionProvider } from "@/contexts/MenuReactionContext";
 import Index from "./pages/Index";
 import WeeklyMenu from "./pages/WeeklyMenu";
 import Feedback from "./pages/Feedback";
@@ -27,21 +28,23 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/menu" element={<WeeklyMenu />} />
-            <Route path="/feedback" element={<Feedback />} />
-            <Route path="/complaint" element={<AIComplaint />} />
-            <Route path="/booking" element={<MealBooking />} />
-            <Route path="/account" element={<MyAccount />} />
-            <Route path="/admin" element={<AdminLogin />} />
-            <Route path="/admin/dashboard" element={<AdminDashboard />} />
-            <Route path="/admin/add-menu" element={<AddMenu />} />
-            <Route path="/admin/analytics" element={<Analytics />} />
-            <Route path="/admin/complaints" element={<AdminComplaints />} />
-            <Route path="/admin/attendance" element={<AdminAttendance />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <MenuReactionProvider>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/menu" element={<WeeklyMenu />} />
+              <Route path="/feedback" element={<Feedback />} />
+              <Route path="/complaint" element={<AIComplaint />} />
+              <Route path="/booking" element={<MealBooking />} />
+              <Route path="/account" element={<MyAccount />} />
+              <Route path="/admin" element={<AdminLogin />} />
+              <Route path="/admin/dashboard" element={<AdminDashboard />} />
+              <Route path="/admin/add-menu" element={<AddMenu />} />
+              <Route path="/admin/analytics" element={<Analytics />} />
+              <Route path="/admin/complaints" element={<AdminComplaints />} />
+              <Route path="/admin/attendance" element={<AdminAttendance />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </MenuReactionProvider>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>

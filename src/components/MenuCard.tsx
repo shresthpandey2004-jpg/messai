@@ -1,14 +1,31 @@
 import { MenuItem } from "@/data/mockData";
 import { ThumbsUp, ThumbsDown, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useMenuReaction } from "@/contexts/MenuReactionContext";
 
 interface MenuCardProps {
   item: MenuItem;
-  onFeedback?: (rating: number) => void;
   showFeedback?: boolean;
 }
 
-export const MenuCard = ({ item, onFeedback, showFeedback = false }: MenuCardProps) => {
+const emojiMap = {
+  1: { emoji: "😠", label: "Terrible" },
+  2: { emoji: "😕", label: "Bad" },
+  3: { emoji: "😐", label: "Okay" },
+  4: { emoji: "😊", label: "Good" },
+  5: { emoji: "😍", label: "Excellent" }
+};
+
+export const MenuCard = ({ item, showFeedback = false }: MenuCardProps) => {
+  const { 
+    addReaction, 
+    getReactionCount, 
+    getUserReaction,
+    getTotalReactions 
+  } = useMenuReaction();
+  
+  const userReaction = getUserReaction(item.id);
+  const totalReactions = getTotalReactions(item.id);
   const popularity = item.likes / (item.likes + item.dislikes) * 100;
   
   return (
@@ -60,20 +77,46 @@ export const MenuCard = ({ item, onFeedback, showFeedback = false }: MenuCardPro
         
         {/* Feedback Buttons */}
         {showFeedback && (
-          <div className="flex gap-2 pt-2 border-t border-border/50">
-            {[1, 2, 3, 4, 5].map((rating) => (
-              <button
-                key={rating}
-                onClick={() => onFeedback?.(rating)}
-                className="flex-1 text-2xl hover:scale-125 transition-transform"
-              >
-                {rating === 1 && "😠"}
-                {rating === 2 && "😕"}
-                {rating === 3 && "😐"}
-                {rating === 4 && "😊"}
-                {rating === 5 && "😍"}
-              </button>
-            ))}
+          <div className="pt-3 border-t border-border/50">
+            <div className="text-xs text-muted-foreground mb-2 flex justify-between items-center">
+              <span>Rate this dish</span>
+              {totalReactions > 0 && (
+                <span className="text-primary font-medium">{totalReactions} reactions</span>
+              )}
+            </div>
+            <div className="flex gap-1">
+              {[1, 2, 3, 4, 5].map((rating) => {
+                const count = getReactionCount(item.id, rating);
+                const isSelected = userReaction === rating;
+                
+                return (
+                  <button
+                    key={rating}
+                    onClick={() => addReaction(item.id, rating)}
+                    className={cn(
+                      "flex-1 flex flex-col items-center gap-1 p-2 rounded-lg transition-all hover:bg-muted/50",
+                      isSelected && "bg-primary/10 ring-2 ring-primary/50 scale-110"
+                    )}
+                    title={emojiMap[rating as keyof typeof emojiMap].label}
+                  >
+                    <span className={cn(
+                      "text-2xl transition-transform",
+                      isSelected ? "scale-125" : "hover:scale-110"
+                    )}>
+                      {emojiMap[rating as keyof typeof emojiMap].emoji}
+                    </span>
+                    {count > 0 && (
+                      <span className={cn(
+                        "text-xs font-medium",
+                        isSelected ? "text-primary" : "text-muted-foreground"
+                      )}>
+                        {count}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         )}
       </div>
