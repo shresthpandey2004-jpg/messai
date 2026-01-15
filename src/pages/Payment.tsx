@@ -55,7 +55,6 @@ const Payment = () => {
   });
 
   const [upiId, setUpiId] = useState("");
-  const [upiPin, setUpiPin] = useState("");
 
   // Session timeout countdown
   useEffect(() => {
@@ -183,17 +182,10 @@ const Payment = () => {
 
     if (method === "UPI") {
       if (selectedUPI) {
-        if (!upiPin || upiPin.length !== 4) {
-          toast.error("Please enter 4-digit UPI PIN");
-          return false;
-        }
+        // UPI app selected - will redirect to app
       } else if (upiId) {
         if (!validateUPI(upiId)) {
           toast.error("Invalid UPI ID format");
-          return false;
-        }
-        if (!upiPin || upiPin.length !== 4) {
-          toast.error("Please enter 4-digit UPI PIN");
           return false;
         }
       } else {
@@ -211,13 +203,37 @@ const Payment = () => {
       return;
     }
 
-    // Generate and verify OTP for security
-    if (!otpVerified) {
-      generateOTP();
-      return;
+    // For UPI, show redirect message and simulate app opening
+    if (method === "UPI") {
+      const upiApp = selectedUPI === "gpay" ? "Google Pay" : 
+                     selectedUPI === "phonepe" ? "PhonePe" :
+                     selectedUPI === "paytm" ? "Paytm" :
+                     selectedUPI === "bhim" ? "BHIM UPI" : "UPI App";
+      
+      toast.info(`Redirecting to ${upiApp}...`, {
+        description: "Complete payment in your UPI app"
+      });
+      
+      setIsProcessing(true);
+      
+      // Simulate UPI app redirect and payment
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Generate and verify OTP for security (after UPI app simulation)
+      if (!otpVerified) {
+        setIsProcessing(false);
+        generateOTP();
+        return;
+      }
+    } else {
+      // For Card/Net Banking, verify OTP first
+      if (!otpVerified) {
+        generateOTP();
+        return;
+      }
+      
+      setIsProcessing(true);
     }
-
-    setIsProcessing(true);
     
     // Simulate payment processing with security checks
     await new Promise(resolve => setTimeout(resolve, 2500));
@@ -440,21 +456,10 @@ const Payment = () => {
                             setSelectedUPI("");
                           }}
                         />
+                        <p className="text-xs text-muted-foreground">
+                          You'll be redirected to your UPI app to complete payment
+                        </p>
                       </div>
-
-                      {(selectedUPI || upiId) && (
-                        <div className="space-y-2">
-                          <Label htmlFor="upiPin">UPI PIN</Label>
-                          <Input
-                            id="upiPin"
-                            type="password"
-                            placeholder="Enter 4-digit PIN"
-                            maxLength={4}
-                            value={upiPin}
-                            onChange={(e) => setUpiPin(e.target.value.replace(/\D/g, ''))}
-                          />
-                        </div>
-                      )}
 
                       <Button
                         className="w-full"
@@ -465,12 +470,13 @@ const Payment = () => {
                         {isProcessing ? (
                           <>
                             <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                            Processing...
+                            Opening UPI App...
                           </>
-                        ) : otpVerified ? (
-                          `Pay ₹${amount}`
                         ) : (
-                          `Verify & Pay ₹${amount}`
+                          <>
+                            <Smartphone className="w-4 h-4 mr-2" />
+                            Pay ₹{amount} via UPI
+                          </>
                         )}
                       </Button>
                     </div>
