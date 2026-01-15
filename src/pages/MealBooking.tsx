@@ -9,6 +9,7 @@ interface BookingSlot {
   date: string;
   breakfast: boolean;
   lunch: boolean;
+  snacks: boolean;
   dinner: boolean;
 }
 
@@ -23,13 +24,14 @@ const MealBooking = () => {
         date: date.toISOString().split('T')[0],
         breakfast: true,
         lunch: true,
+        snacks: true,
         dinner: true,
       });
     }
     return dates;
   });
 
-  const toggleMeal = (dateIndex: number, meal: 'breakfast' | 'lunch' | 'dinner') => {
+  const toggleMeal = (dateIndex: number, meal: 'breakfast' | 'lunch' | 'snacks' | 'dinner') => {
     setBookings(prev => {
       const updated = [...prev];
       updated[dateIndex] = {
@@ -56,9 +58,14 @@ const MealBooking = () => {
     };
   };
 
-  const meals = ['breakfast', 'lunch', 'dinner'] as const;
-  const mealEmojis = { breakfast: '🌅', lunch: '☀️', dinner: '🌙' };
-  const mealTimes = { breakfast: '7:30 - 9:00 AM', lunch: '12:30 - 2:00 PM', dinner: '7:30 - 9:00 PM' };
+  const meals = ['breakfast', 'lunch', 'snacks', 'dinner'] as const;
+  const mealEmojis = { breakfast: '🌅', lunch: '☀️', snacks: '☕', dinner: '🌙' };
+  const mealTimes = { 
+    breakfast: '7:30 - 9:00 AM', 
+    lunch: '12:30 - 2:00 PM', 
+    snacks: '4:00 - 5:30 PM',
+    dinner: '7:30 - 9:00 PM' 
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -77,7 +84,7 @@ const MealBooking = () => {
           
           <div className="glass-card p-6 md:p-8">
             {/* Header */}
-            <div className="grid grid-cols-4 gap-2 md:gap-4 mb-6 text-center">
+            <div className="grid grid-cols-5 gap-2 md:gap-4 mb-6 text-center">
               <div className="text-sm font-medium text-muted-foreground">Date</div>
               {meals.map(meal => (
                 <div key={meal} className="text-sm font-medium text-foreground capitalize">
@@ -98,7 +105,7 @@ const MealBooking = () => {
                   <div
                     key={booking.date}
                     className={cn(
-                      "grid grid-cols-4 gap-2 md:gap-4 items-center p-3 rounded-xl transition-all",
+                      "grid grid-cols-5 gap-2 md:gap-4 items-center p-3 rounded-xl transition-all",
                       isToday ? "bg-primary/10 border border-primary/30" : "bg-muted/30 hover:bg-muted/50"
                     )}
                   >
@@ -148,8 +155,8 @@ const MealBooking = () => {
                     Meals booked this week
                   </p>
                   <p className="text-2xl font-bold text-foreground">
-                    {bookings.reduce((acc, b) => acc + (b.breakfast ? 1 : 0) + (b.lunch ? 1 : 0) + (b.dinner ? 1 : 0), 0)}
-                    <span className="text-muted-foreground text-lg"> / 21</span>
+                    {bookings.reduce((acc, b) => acc + (b.breakfast ? 1 : 0) + (b.lunch ? 1 : 0) + (b.snacks ? 1 : 0) + (b.dinner ? 1 : 0), 0)}
+                    <span className="text-muted-foreground text-lg"> / 28</span>
                   </p>
                 </div>
                 
